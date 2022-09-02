@@ -1,3 +1,5 @@
+#EDITED 02-09-2022
+
 # the game of life
 
 # #mark all places where new life will be born;
@@ -8,22 +10,11 @@
 
 def convert(initial_state= ('''-------
 -------
---XXX--
--------
--------''')): #convert input into a list, so it is easier to operate on
+--X-X-X
+--X-X-X
+--X-X-X''')): #convert input into a list, so it is easier to operate on
 
-    game_list = []
-    row_start = 0 #just to iterate through input
-    row_end = 7
-
-    for _ in range(5):
-        row_cells = ''
-
-        for i in range(row_start,row_end):
-            row_cells += initial_state[i]
-        game_list.append(row_cells)
-        row_start += 8
-        row_end += 8
+    game_list = initial_state.split('\n')
 
     return(game_list)
 
@@ -35,6 +26,7 @@ def mark_cell():
     result = '' #life after day 1 (after one neighbour check for all cells)
 
     game_list = convert()
+    # print(game_list)
 
     for r in range(len(game_list)):
         result += '''
@@ -43,53 +35,49 @@ def mark_cell():
             choosen_cell = game_list[r][c]
         
             try:
-
-                neighbours = [game_list[r-1][c-1],game_list[r-1][c],game_list[r-1][c+1],game_list[r][c-1],game_list[r][c+1],game_list[r+1][c-1],game_list[r+1][c],game_list[r+1][c+1]]
                 born_count = 0
 
-                if r == 0:
-                    neighbours = neighbours[3:]
-                elif r == 4:
-                    neighbours = neighbours[:5]
+                if r == 0 and c != 0 and c!= 6:
+
+                    neighbours = [game_list[r][c-1],game_list[r][c+1],game_list[r+1][c-1],game_list[r+1][c],game_list[r+1][c+1]]
+
+                elif r == 4 and c != 0 and c!= 6:
+
+                    neighbours = [game_list[r-1][c-1],game_list[r-1][c],game_list[r-1][c+1],game_list[r][c-1],game_list[r][c+1]]
 
                 elif c == 0 and r != 0 and r != 4:
 
-                    del neighbours[5]
-                    del neighbours[3]
-                    del neighbours[0]
-                    
+                    neighbours = [game_list[r-1][c],game_list[r-1][c+1],game_list[r][c+1],game_list[r+1][c],game_list[r+1][c+1]]
+ 
                 elif c == 6  and r != 0 and r != 4:
 
-                    del neighbours[6]
-                    del neighbours[4]
-                    del neighbours[2]
+                    neighbours = [game_list[r-1][c-1],game_list[r-1][c],game_list[r][c-1],game_list[r+1][c-1],game_list[r+1][c]]
 
                 elif r == 0 and c == 0:
 
-                    del neighbours[2]
-                    del neighbours[0]
+                    neighbours = [game_list[r][c+1],game_list[r+1][c],game_list[r+1][c+1]]
 
                 elif r == 0 and c == 6:
 
-                    del neighbours[4]
-                    del neighbours[1]
+                    neighbours = [game_list[r][c-1],game_list[r+1][c-1],game_list[r+1][c]]
 
                 elif r == 4 and c == 0:
 
-                    del neighbours[3]
-                    del neighbours[0]
+                    neighbours = [game_list[r-1][c],game_list[r-1][c+1],game_list[r][c+1]]
 
                 elif r == 4 and c == 6:
 
-                    del neighbours[4]
-                    del neighbours[2]
+                    neighbours = [game_list[r-1][c-1],game_list[r-1][c],game_list[r][c-1]]
+
+                else: 
+                    neighbours = [game_list[r-1][c-1],game_list[r-1][c],game_list[r-1][c+1],game_list[r][c-1],game_list[r][c+1],game_list[r+1][c-1],game_list[r+1][c],game_list[r+1][c+1]]
 
                 for num in neighbours:
                     if  num == "X":
                         born_count +=1
 
-            except IndexError:
-                pass  
+            except IndexError as ex:
+                print(ex)  
 
             finally:
                 pass
@@ -100,6 +88,7 @@ def mark_cell():
                 result += "X"
             else:
                 result += choosen_cell
+
     print (result)
     return result        
 
